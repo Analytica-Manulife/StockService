@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "RvAZaFX9JT+iFYlmaLKqpE71cTqjviu0daeII9zGGOs=",
+  "Source": "StockMarketService",
+  "BasePath": "_content/StockMarketService",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
