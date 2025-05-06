@@ -165,3 +165,5 @@
 /Users/yashmehta/AnalyticaManulife/StockMarketService/StockMarketService/obj/Debug/net9.0/StockMarketService.genruntimeconfig.cache
 /Users/yashmehta/AnalyticaManulife/StockMarketService/StockMarketService/obj/Debug/net9.0/ref/StockMarketService.dll
 /Users/yashmehta/AnalyticaManulife/StockMarketService/StockMarketService/bin/Debug/net9.0/Dapper.dll
+/Users/yashmehta/AnalyticaManulife/StockMarketService/StockMarketService/obj/Debug/net9.0/StockMarketService.sourcelink.json
+/Users/yashmehta/AnalyticaManulife/StockMarketService/StockMarketService/bin/Debug/net9.0/Newtonsoft.Json.dll

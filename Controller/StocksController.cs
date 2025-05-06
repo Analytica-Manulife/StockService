@@ -1,3 +1,4 @@
+using BudgetService.Services;
 using Microsoft.AspNetCore.Mvc;
 using StockMarketService.Service;
 
@@ -28,5 +29,13 @@ public class StocksController : ControllerBase
         if (stock == null) return NotFound();
         return Ok(stock);
     }
+    
+    [HttpPost("update-all")]
+    public async Task<IActionResult> UpdateAllStocks()
+    {
+        await _stockService.UpdateAllStockDataAsync();
+        return Ok(new { message = "Stock data updated manually." });
+    }
+
     
 }

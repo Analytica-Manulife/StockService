@@ -9,6 +9,8 @@ using Microsoft.OpenApi.Models;
 using Dapper;
 using System.Data;
 using System.Data.SqlClient;
+using BudgetService.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +22,7 @@ builder.Logging.AddConsole();
 // Add services to the container
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddHttpClient();
 
 // Register Swagger for API documentation
 builder.Services.AddSwaggerGen(c =>
@@ -33,9 +36,15 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 // -------------------- Dependency Injection --------------------
+
 // Register the database connection for Dapper
 builder.Services.AddScoped<IDbConnection>(sp =>
     new SqlConnection(builder.Configuration.GetConnectionString("DefaultConnection"))
+);
+
+// Register DbContext for Entity Framework
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
 // Register PortfolioService and IPortfolioService for dependency injection
