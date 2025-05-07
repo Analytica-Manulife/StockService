@@ -46,6 +46,15 @@ public class StocksController : ControllerBase
         var parsedData = _stockService.ParseTimeSeriesData(rawData, interval);
         return Ok(parsedData);
     }
+    
+    [HttpGet("{ticker}/full")]
+    public async Task<IActionResult> GetFullStockData(string ticker)
+    {
+        var data = await _stockService.GetFullStockDataAsync(ticker);
+        if (data == null || data.StockQuote == null) return NotFound();
+
+        return Ok(data);
+    }
 
     
 }

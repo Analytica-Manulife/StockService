@@ -13,6 +13,8 @@ public class StockGateway : IStockGateway
         private readonly AppDbContext _context;
         private readonly HttpClient _httpClient;
         private const string ApiKey = "0D4M45OPUYZTNUTH"; 
+        private const string ApiKey2 = "09UPT1SFXZOI0CBC"; 
+
         public StockGateway(IConfiguration configuration, IHttpClientFactory httpClientFactory, AppDbContext context)
         {
             _configuration = configuration;
@@ -162,7 +164,7 @@ public class StockGateway : IStockGateway
                 _ => "TIME_SERIES_MONTHLY"
             };
 
-            var url = $"https://www.alphavantage.co/query?function={function}&symbol={ticker}&apikey={ApiKey}";
+            var url = $"https://www.alphavantage.co/query?function={function}&symbol={ticker}&apikey={ApiKey2}";
             Console.WriteLine($"[INFO] Requesting data from URL: {url}");
 
             var response = await _httpClient.GetAsync(url);
@@ -227,6 +229,29 @@ public class StockGateway : IStockGateway
 
             return history.OrderByDescending(h => h.Date).ToList();
         }
+        
+        public async Task<JObject> FetchCompanyOverviewAsync(string ticker)
+        {
+            var url = $"https://www.alphavantage.co/query?function=OVERVIEW&symbol={ticker}&apikey={ApiKey2}";
+            var response = await _httpClient.GetAsync(url);
+            if (!response.IsSuccessStatusCode) return null;
+            var content = await response.Content.ReadAsStringAsync();
+            return JObject.Parse(content);
+        }
+        
+        public async Task<FullStockData> GetFullStockDataAsync(string ticker)
+        {
+            var stock = await FetchStockDataFromApiAsync(ticker);
+            var historyJson = await FetchTimeSeriesDataAsync(ticker);
+            var history = ParseTimeSeriesData(historyJson, "monthly");
+            var overview = await FetchCompanyOverviewAsync(ticker);
 
+            return new FullStockData
+            {
+                StockQuote = stock,
+                History = history,
+                Overview = overview
+            };
+        }
 
     }

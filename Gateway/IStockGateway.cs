@@ -13,4 +13,5 @@ public interface IStockGateway
 
     Task<JObject> FetchTimeSeriesDataAsync(string ticker, string interval = "monthly");
     List<StockHistory> ParseTimeSeriesData(JObject json, string interval);
+    Task<FullStockData> GetFullStockDataAsync(string ticker);
 }

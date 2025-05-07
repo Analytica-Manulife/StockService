@@ -47,4 +47,10 @@ public class StockService : IStockService
     {
         return  _stockGateway.ParseTimeSeriesData(rawData, interval);
     }
+    
+    public Task<FullStockData> GetFullStockDataAsync(string ticker)
+    {
+        return _stockGateway.GetFullStockDataAsync(ticker);
+    }
+
 }

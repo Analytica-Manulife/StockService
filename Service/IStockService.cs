@@ -10,4 +10,6 @@ public interface IStockService
     
     Task<JObject> FetchTimeSeriesDataAsync(string ticker, string interval);
     IEnumerable<StockHistory> ParseTimeSeriesData(JObject rawData, string interval);
+
+    Task<FullStockData> GetFullStockDataAsync(string ticker);
 }

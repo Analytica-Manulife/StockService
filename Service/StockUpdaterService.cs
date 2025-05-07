@@ -14,20 +14,20 @@ public class StockUpdaterService : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation("Stock Updater Service started.");
-        while (!stoppingToken.IsCancellationRequested)
-        {
-            try
-            {
-                await _stockService.UpdateAllStockDataAsync();
-                _logger.LogInformation("Stock data updated at: {time}", DateTime.Now);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error updating stock data");
-            }
-
-            await Task.Delay(_updateInterval, stoppingToken);
-        }
+        // _logger.LogInformation("Stock Updater Service started.");
+        // while (!stoppingToken.IsCancellationRequested)
+        // {
+        //     try
+        //     {
+        //         await _stockService.UpdateAllStockDataAsync();
+        //         _logger.LogInformation("Stock data updated at: {time}", DateTime.Now);
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         _logger.LogError(ex, "Error updating stock data");
+        //     }
+        //
+        //     await Task.Delay(_updateInterval, stoppingToken);
+        // }
     }
 }
