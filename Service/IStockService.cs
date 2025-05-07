@@ -1,10 +1,13 @@
+using Newtonsoft.Json.Linq;
 using StockMarketMicroservice.Models;
-
-namespace BudgetService.Services;
+using StockMarketService.Model;
 
 public interface IStockService
 {
     Task<IEnumerable<Stock>> GetAllStocksAsync();
     Task<Stock> GetStockByTickerAsync(string ticker);
-    Task UpdateAllStockDataAsync(); // <-- New Method
+    Task UpdateAllStockDataAsync();
+    
+    Task<JObject> FetchTimeSeriesDataAsync(string ticker, string interval);
+    IEnumerable<StockHistory> ParseTimeSeriesData(JObject rawData, string interval);
 }

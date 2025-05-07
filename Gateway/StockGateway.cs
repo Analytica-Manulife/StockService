@@ -3,6 +3,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using StockMarketMicroservice.Models;
 using Newtonsoft.Json.Linq;
+using StockMarketService.Model;
 
 namespace StockMarketService.Gateway;
 
@@ -151,4 +152,81 @@ public class StockGateway : IStockGateway
         {
             return volume < 0 ? 0 : volume; // Ensures volume can't be negative
         }
+        
+        public async Task<JObject> FetchTimeSeriesDataAsync(string ticker, string interval = "monthly")
+        {
+            string function = interval.ToLower() switch
+            {
+                "daily" => "TIME_SERIES_DAILY",
+                "weekly" => "TIME_SERIES_WEEKLY",
+                _ => "TIME_SERIES_MONTHLY"
+            };
+
+            var url = $"https://www.alphavantage.co/query?function={function}&symbol={ticker}&apikey={ApiKey}";
+            Console.WriteLine($"[INFO] Requesting data from URL: {url}");
+
+            var response = await _httpClient.GetAsync(url);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                Console.WriteLine($"[ERROR] Failed to fetch data. Status Code: {response.StatusCode}");
+                return null;
+            }
+
+            var content = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"[DEBUG] Raw JSON Response: {content}");
+
+            var json = JObject.Parse(content);
+
+            if (json["Error Message"] != null)
+            {
+                Console.WriteLine("[ERROR] API returned error message: " + json["Error Message"]);
+                return null;
+            }
+
+            if (json["Note"] != null)
+            {
+                Console.WriteLine("[WARNING] API limit notice: " + json["Note"]);
+                return null;
+            }
+
+            Console.WriteLine("[INFO] Successfully fetched and parsed JSON response.");
+            return json;
+        }
+
+        
+        public List<StockHistory> ParseTimeSeriesData(JObject json, string interval)
+        {
+            var seriesKey = interval switch
+            {
+                "daily" => "Time Series (Daily)",
+                "weekly" => "Weekly Time Series",
+                _ => "Monthly Time Series"
+            };
+
+            var data = json[seriesKey];
+            if (data == null) return new List<StockHistory>();
+
+            var history = new List<StockHistory>();
+
+            foreach (var entry in data.Children<JProperty>())
+            {
+                var date = DateTime.Parse(entry.Name);
+                var values = entry.Value;
+
+                history.Add(new StockHistory
+                {
+                    Date = date,
+                    Open = decimal.Parse(values["1. open"].ToString()),
+                    High = decimal.Parse(values["2. high"].ToString()),
+                    Low = decimal.Parse(values["3. low"].ToString()),
+                    Close = decimal.Parse(values["4. close"].ToString()),
+                    Volume = long.Parse(values["5. volume"].ToString())
+                });
+            }
+
+            return history.OrderByDescending(h => h.Date).ToList();
+        }
+
+
     }

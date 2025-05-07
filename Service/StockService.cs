@@ -1,6 +1,8 @@
 using BudgetService.Services;
 using StockMarketMicroservice.Models;
 using StockMarketService.Gateway;
+using Newtonsoft.Json.Linq;
+using StockMarketService.Model;
 
 namespace StockMarketService.Service;
 
@@ -22,6 +24,7 @@ public class StockService : IStockService
     {
         return _stockGateway.GetStockByTickerAsync(ticker);
     }
+
     public async Task UpdateAllStockDataAsync()
     {
         var stocks = await _stockGateway.GetAllStocksAsync();
@@ -30,9 +33,18 @@ public class StockService : IStockService
             var updatedStock = await _stockGateway.FetchStockDataFromApiAsync(stock.Ticker);
             if (updatedStock != null)
             {
-                await _stockGateway.UpdateStockAsync(stock,updatedStock); // Persist to DB
+                await _stockGateway.UpdateStockAsync(stock, updatedStock); // Persist to DB
             }
         }
     }
 
+    public async Task<JObject> FetchTimeSeriesDataAsync(string ticker, string interval)
+    {
+        return await _stockGateway.FetchTimeSeriesDataAsync(ticker, interval);
+    }
+
+    public IEnumerable<StockHistory> ParseTimeSeriesData(JObject rawData, string interval)
+    {
+        return  _stockGateway.ParseTimeSeriesData(rawData, interval);
+    }
 }

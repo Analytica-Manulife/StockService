@@ -36,6 +36,16 @@ public class StocksController : ControllerBase
         await _stockService.UpdateAllStockDataAsync();
         return Ok(new { message = "Stock data updated manually." });
     }
+    
+    [HttpGet("{ticker}/history")]
+    public async Task<IActionResult> GetStockHistory(string ticker, [FromQuery] string interval = "monthly")
+    {
+        var rawData = await _stockService.FetchTimeSeriesDataAsync(ticker, interval);
+        if (rawData == null) return NotFound();
+
+        var parsedData = _stockService.ParseTimeSeriesData(rawData, interval);
+        return Ok(parsedData);
+    }
 
     
 }
