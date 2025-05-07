@@ -58,6 +58,8 @@ public class StockGateway : IStockGateway
             {
                 Ticker = reader["ticker"].ToString(),
                 CompanyName = reader["company_name"].ToString(),
+                YahooApiUrl = reader["yahoo_api_url"]?.ToString(),
+                LastPrice = reader["last_price"] != DBNull.Value ? reader.GetDecimal(reader.GetOrdinal("last_price")) : 0,
                 OpenPrice = reader.GetDecimal(reader.GetOrdinal("open_price")),
                 HighPrice = reader.GetDecimal(reader.GetOrdinal("high_price")),
                 LowPrice = reader.GetDecimal(reader.GetOrdinal("low_price")),
@@ -66,12 +68,15 @@ public class StockGateway : IStockGateway
                 LatestTradingDay = reader.GetDateTime(reader.GetOrdinal("latest_trading_day")),
                 ChangeAmount = reader.GetDecimal(reader.GetOrdinal("change_amount")),
                 ChangePercent = reader["change_percent"].ToString(),
-                LastUpdated = new DateTimeOffset(reader.GetDateTime(reader.GetOrdinal("last_updated"))).ToUnixTimeSeconds()
+                StockType = reader["stock_type"]?.ToString(),
+                LastUpdated = new DateTimeOffset(reader.GetDateTime(reader.GetOrdinal("last_updated"))).ToUnixTimeSeconds(),
+                Logo = reader["logo"]?.ToString()
             };
         }
 
+
         
-        public async Task UpdateStockAsync(Stock updatedStock)
+        public async Task UpdateStockAsync(Stock orignalStock, Stock updatedStock)
         {
             // Sanitize and validate input
             updatedStock.OpenPrice = EnsureValidPrice(updatedStock.OpenPrice);
@@ -84,7 +89,7 @@ public class StockGateway : IStockGateway
             var parameters = new[]
             {
                 new SqlParameter("@ticker", updatedStock.Ticker),
-                new SqlParameter("@company_name", updatedStock.CompanyName ?? (object)DBNull.Value),
+                new SqlParameter("@company_name", orignalStock.CompanyName ?? (object)DBNull.Value),
                 new SqlParameter("@open_price", updatedStock.OpenPrice),
                 new SqlParameter("@high_price", updatedStock.HighPrice),
                 new SqlParameter("@low_price", updatedStock.LowPrice),

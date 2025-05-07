@@ -30,7 +30,7 @@ public class StockService : IStockService
             var updatedStock = await _stockGateway.FetchStockDataFromApiAsync(stock.Ticker);
             if (updatedStock != null)
             {
-                await _stockGateway.UpdateStockAsync(updatedStock); // Persist to DB
+                await _stockGateway.UpdateStockAsync(stock,updatedStock); // Persist to DB
             }
         }
     }
