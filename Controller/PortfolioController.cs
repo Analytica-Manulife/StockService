@@ -90,7 +90,7 @@ namespace StockMarketService.Controller;
         {
             try
             {
-                await _portfolioService.UpdateStockDataAsync(
+                await _portfolioService.UpdateStockDataAsync( 
                     request.Ticker,
                     request.CompanyName,
                     request.OpenPrice,
@@ -109,4 +109,22 @@ namespace StockMarketService.Controller;
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+        [HttpGet("{accountId}/portfolio")]
+        public async Task<ActionResult<IEnumerable<PortfolioStockDto>>> GetPortfolioWithStocksAccountAsync(Guid accountId)
+        {
+            try
+            {
+                var portfolio = await _portfolioService.GetPortfolioWithStockAccountsAsync(accountId);
+                if (portfolio == null || !portfolio.Any())
+                {
+                    return NotFound("Portfolio not found for the given account.");
+                }
+                return Ok(portfolio);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
     }

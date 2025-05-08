@@ -1,15 +1,19 @@
 using System.Data;
 using Dapper;
 using StockMarketMicroservice.Models;
+using StockMarketService.Data;
+using StockMarketService.Model;
 using StockMarketService.Service;
 
 public class PortfolioService : IPortfolioService
     {
         private readonly IDbConnection _dbConnection;
+        private readonly IPortfolioRepository _repository;
 
-        public PortfolioService(IDbConnection dbConnection)
+        public PortfolioService(IDbConnection dbConnection, IPortfolioRepository repository)
         {
             _dbConnection = dbConnection;
+            _repository = repository;
         }
 
         // Get portfolio for a specific account (calls stored procedure)
@@ -109,5 +113,10 @@ public class PortfolioService : IPortfolioService
                 parameters,
                 commandType: CommandType.StoredProcedure
             );
+        }
+        
+        public async Task<IEnumerable<PortfolioStockDto>> GetPortfolioWithStockAccountsAsync(Guid accountId)
+        {
+            return await _repository.GetPortfolioWithStocksAsync(accountId);
         }
     }

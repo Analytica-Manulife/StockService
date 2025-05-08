@@ -12,6 +12,7 @@ using System.Data.SqlClient;
 using BudgetService.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
+using StockMarketService.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,7 +55,7 @@ builder.Services.AddScoped<IPortfolioService, PortfolioService>();
 builder.Services.AddScoped<IStockGateway, StockGateway>();
 builder.Services.AddScoped<IStockService, StockService>();
 builder.Services.AddScoped<IStockTransactionService, StockTransactionService>();
-
+builder.Services.AddScoped<IPortfolioRepository, PortfolioRepository>();
 // -------------------- Build Application --------------------
 var app = builder.Build();
 

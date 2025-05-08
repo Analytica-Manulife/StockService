@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("StockMarketService")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fc658d2e4dc9c3c736d283032f1284c70a769f1e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ef85e5d9e15c94ab7f5bf0c75498896a8b57f132")]
 [assembly: System.Reflection.AssemblyProductAttribute("StockMarketService")]
 [assembly: System.Reflection.AssemblyTitleAttribute("StockMarketService")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

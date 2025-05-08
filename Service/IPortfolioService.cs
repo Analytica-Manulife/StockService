@@ -2,6 +2,7 @@ using StockMarketMicroservice.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using StockMarketService.Model;
 
 namespace StockMarketService.Service
 {
@@ -18,8 +19,8 @@ namespace StockMarketService.Service
 
         // Get stock data by ticker
         Task<Stock> GetStockDataAsync(string ticker);
-        
-        
+
+        Task<IEnumerable<PortfolioStockDto>> GetPortfolioWithStockAccountsAsync(Guid accountId);
 
         // Update stock data
         Task UpdateStockDataAsync(
