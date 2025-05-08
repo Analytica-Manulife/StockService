@@ -61,7 +61,7 @@ public class StockGateway : IStockGateway
             {
                 Ticker = reader["ticker"].ToString(),
                 CompanyName = reader["company_name"].ToString(),
-                YahooApiUrl = reader["yahoo_api_url"]?.ToString(),
+                    YahooApiUrl = reader["yahoo_api_url"]?.ToString(),
                 LastPrice = reader["last_price"] != DBNull.Value ? reader.GetDecimal(reader.GetOrdinal("last_price")) : 0,
                 OpenPrice = reader.GetDecimal(reader.GetOrdinal("open_price")),
                 HighPrice = reader.GetDecimal(reader.GetOrdinal("high_price")),
@@ -73,7 +73,7 @@ public class StockGateway : IStockGateway
                 ChangePercent = reader["change_percent"].ToString(),
                 StockType = reader["stock_type"]?.ToString(),
                 LastUpdated = new DateTimeOffset(reader.GetDateTime(reader.GetOrdinal("last_updated"))).ToUnixTimeSeconds(),
-                Logo = reader["logo"]?.ToString()
+                    Logo = reader["logo"]?.ToString()
             };
         }
 
